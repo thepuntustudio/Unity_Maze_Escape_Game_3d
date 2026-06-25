@@ -127,10 +127,19 @@ public class PlayerController : MonoBehaviour
     {
         if (v.isPressed) attackRequested = true;
     }
+    
 
     public void OnInteract(InputValue v)
     {
+        // This is where you would handle the interaction logic, such as raycasting to detect interactable objects.
         if (v.isPressed) interactRequested = true;
+        Ray ray = new Ray(camTransform.position, camTransform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 2.5f))
+        {
+            // Try calling OnInteract on whatever we're looking at
+            hit.collider.SendMessageUpwards("OnInteract", SendMessageOptions.DontRequireReceiver);
+        }
+
     }
 
     // Previous / Next — useful for weapon or item cycling
